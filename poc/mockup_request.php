@@ -9,6 +9,7 @@ function getPlayerData($uuid)
     $password = "";
     $database = "ifheroes_warehouse";
 
+
     $connection = new mysqli($serveradress, $username, $password, $database);
 
     $query = "SELECT * FROM player_warehouse WHERE player_uuid = '$uuid';";

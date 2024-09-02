@@ -1,0 +1,9 @@
+{
+    "db": {
+        "server":"",
+        "user":"",
+        "password":"",
+        "database":""
+    },
+    "bearer":"token here"
+}

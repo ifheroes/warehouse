@@ -1,7 +1,14 @@
 {
-    "section":"basicData",
-    "schema": {
-          "uuid": "",
-          "name": ""
+  "basicData": {
+      "uuid": "'.$basic_value_uuid.'",
+      "name": "'.$basic_value_name.'"
+  },
+  "advancedData": {
+      "schema":"v1",
+      "language": "DE"
+  },
+  "pluginData": {
+      "schema":"v1",
+      "values": {}
       }
-    }
+  }
