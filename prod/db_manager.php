@@ -1,8 +1,13 @@
 <?php 
 
 class db_connection {
-    public function database_connection($serveradress, $username, $password, $database){
-        new mysqli($serveradress, $username, $password, $database);
+    public function database_connection(){
+        $connection = new mysqli('localhost', 'root', '', 'ifheroes_warehouse');
+        if ($connection->connect_error) {
+            die("Connection failed: " . $connection->connect_error);
+        }
+
+        return $connection; 
     }
 
 }
@@ -12,6 +17,27 @@ class db_get {
 
     public function database_get_playerpprofil($uuid){
 
+        // creates database connection
+        $db_conn = new db_connection();
+        $connection = $db_conn->database_connection(); 
+
+        // gets playerprofile from database
+        $query = "SELECT * FROM player_warehouse WHERE player_uuid = '$uuid';";
+        $result = $connection->query($query); 
+
+        // if exist print it out or return error
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                header('Content-Type: application/json');
+                echo $row['player_data'];
+            }
+        } else {
+            http_response_code(404);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Not found']);
+        }
+
+        $connection->close();
     }
 }
 
@@ -36,7 +62,7 @@ class db_insert {
 
     /// modifyes all the static values in pluginData - Third section
     public function database_update_pluginData($uuid,$json){
-        
+
     }
 }
 
