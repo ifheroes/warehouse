@@ -1,14 +1,12 @@
 {
-  "basicData": {
-      "uuid": "'.$basic_value_uuid.'",
-      "name": "'.$basic_value_name.'"
-  },
-  "advancedData": {
-      "schema":"v1",
-      "language": "DE"
-  },
-  "pluginData": {
-      "schema":"v1",
-      "values": {}
+    "section":"advancedData",
+    "schema": {
+          "uuid": "",
+          "name": "",
+          "payload": {
+            "language":"DE",
+            "hours":"223",
+            "beta-user": true
+          }
       }
-  }
+    }
