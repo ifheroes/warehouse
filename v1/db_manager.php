@@ -82,12 +82,20 @@ class db_manager {
     
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-    
+                
+                /// reads player json data from sql 
                 $data = json_decode($row['player_data'], true);
+
+                /// gets the version from current player profile
+                $version = $data['basicData']['version'];
+
+                /// string to update database
+                $updater = ['version' => $version, 'uuid' => $uuid, 'name' => $name];
+
                 if (isset($data['schema']) && is_array($data['schema'])) {
-                    $data['basicData']['name'] = $name;
+                    $data['basicData'] = $updater;
                 } else {
-                    $data['basicData'] = ['name' => $name];
+                    $data['basicData'] = $updater;
                 }
     
                 $new_data = json_encode($data);
@@ -112,13 +120,88 @@ class db_manager {
     }
 
     /// modifyes all the static values in advancedData - Second section
-    public function database_update_advancedData($uuid,$json) {
+    public function database_update_advancedData($uuid,$language) {
+        $db_conn = new db_connection();
+        $connection = $db_conn->database_connection(); 
 
+        $query = "SELECT * FROM player_warehouse WHERE player_uuid = '$uuid';";
+        $result = $connection->query($query);
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                
+                /// reads player json data from sql 
+                $data = json_decode($row['player_data'], true);
+
+                $updater = ['language' => $language];
+
+
+                if (isset($data['schema']) && is_array($data['schema'])) {
+                    $data['advancedData'] = $updater;
+                } else {
+                    $data['advancedData'] = $updater;
+                }
+    
+                $new_data = json_encode($data);
+    
+                $query_update = "UPDATE player_warehouse SET player_data = '$new_data' WHERE player_uuid = '$uuid';";
+                $update_result = $connection->query($query_update);
+    
+                 if ($update_result) {
+                    http_response_code(200);
+                    echo json_encode(['success' => 'Player data updated successfully']);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Failed to update player data']);
+                } 
+            }
+        } else {
+            http_response_code(404);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Player not found']);
+
+        }        
     }
 
     /// modifyes all the static values in pluginData - Third section
     public function database_update_pluginData($uuid,$json){
+        $db_conn = new db_connection();
+        $connection = $db_conn->database_connection(); 
 
+        $query = "SELECT * FROM player_warehouse WHERE player_uuid = '$uuid';";
+        $result = $connection->query($query);
+    
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                
+                /// reads player json data from sql 
+                $data = json_decode($row['player_data'], true);
+
+                if (isset($data['schema']) && is_array($data['schema'])) {
+                    $data['pluginData']['values'] = $json;
+                } else {
+                    $data['pluginData']['values'] = $json;
+                }
+    
+                $new_data = json_encode($data);
+    
+                $query_update = "UPDATE player_warehouse SET player_data = '$new_data' WHERE player_uuid = '$uuid';";
+                $update_result = $connection->query($query_update);
+    
+                 if ($update_result) {
+                    http_response_code(200);
+                    echo json_encode(['success' => 'Player data updated successfully']);
+                } else {
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Failed to update player data']);
+                } 
+            }
+        } else {
+            http_response_code(404);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Player not found']);
+
+        }
     }
 }
 

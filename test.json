@@ -1,12 +1,11 @@
 {
-    "section":"advancedData",
-    "schema": {
-          "uuid": "",
-          "name": "",
-          "payload": {
-            "language":"DE",
-            "hours":"223",
-            "beta-user": true
-          }
-      }
-    }
+  "basicData": {
+    "version": "v1",
+    "uuid": "b6fe8bea-48f3-4def-b64c-2026455e4056",
+    "name": "ChrischiMc1"
+  },
+  "advancedData": {"language":"EN"},
+  "pluginData": {
+    "values": []
+  }
+}

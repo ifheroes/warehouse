@@ -11,15 +11,27 @@ include('api_manager.php');
 
 
 
-/// get user
 $api_action = new api_manager();
-$api_action->api_get_playerpprofil($_GET['uuid']);
+
+
+/// get user
+if(isset($_GET['uuid'])){
+    $api_action->api_get_playerpprofil($_GET['uuid']);
+    
+}
 
 /// create user
 
 $api_action->api_create_playerprofil();
 
 /// update base
-$api_action->api_update_base()
+$api_action->api_update_base();
+
+/// update advanced
+$api_action->api_update_advancedData();
+
+/// update plugindata
+$api_action->api_update_pluginData();
+
 
 ?>
