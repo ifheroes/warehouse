@@ -1,0 +1,11 @@
+# Legt index.php als Standard-Dokument fest
+DirectoryIndex index.php
+
+# Erlaubt den Zugriff auf index.php und verweigert den Zugriff auf andere PHP-Dateien
+<FilesMatch "\.(php)$">
+    Require all denied
+</FilesMatch>
+
+<Files "index.php">
+    Require all granted
+</Files>

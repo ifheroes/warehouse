@@ -9,11 +9,18 @@ class api_manager {
     
     /// this function gets all the data from the database like player profile
     public function api_get_playerpprofil($uuid){
+        header("Access-Control-Allow-Methods: GET");
+
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             $sql_action = new db_manager();
             $sql_action->database_get_playerpprofil($uuid);
 
+        } else {
+            http_response_code(404);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Needs to be a GET']);
+            exit;
         }
     }
 
