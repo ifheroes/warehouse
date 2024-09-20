@@ -6,6 +6,10 @@ DirectoryIndex index.php
     Require all denied
 </FilesMatch>
 
+<FilesMatch "\.(json)$">
+    Require all denied
+</FilesMatch>
+
 <Files "index.php">
     Require all granted
 </Files>

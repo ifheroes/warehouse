@@ -2,12 +2,15 @@
 
 class db_connection {
     public function database_connection(){
-        $connection = new mysqli('localhost', 'root', '', 'ifheroes_warehouse');
-        if ($connection->connect_error) {
-            die("Connection failed: " . $connection->connect_error);
-        }
 
+        $data = json_decode(file_get_contents('config.json'), true);
+    try { 
+        $connection = new mysqli($data['db']['server'], $data['db']['user'], $data['db']['password'], $data['db']['database']);
         return $connection; 
+
+    } catch (Exception $e) {
+        ini_set('display_errors', 0);
+    }
     }
 
 }

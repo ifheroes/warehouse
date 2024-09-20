@@ -1,2 +1,12 @@
-FROM canonical/apache2
+# First stage: Clone the repository
+FROM bitnami/git as clone_stage
+RUN git clone https://github.com/ifheroes/infinityheroes-bot.git /bot
 
+# Install Apache, PHP, jq, and other dependencies
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    php \
+    libapache2-mod-php \
+    jq && \
+    a2enmod rewrite && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*

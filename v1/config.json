@@ -1,9 +1,8 @@
 {
     "db": {
-        "server":"",
-        "user":"",
+        "server":"localhost",
+        "user":"root",
         "password":"",
-        "database":""
-    },
-    "bearer":"token here"
+        "database":"ifheroes_warehouse"
+    }
 }
