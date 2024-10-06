@@ -1,4 +1,16 @@
+# Rewrite HTTPS to HTTP (falls SSL nicht mehr vorhanden ist)
+RewriteEngine On
+RewriteCond %{HTTPS} on
+RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Alternativ: Bedingung, wenn SSL-Zertifikat vorhanden ist
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ - [L]
+
+
 # Legt index.php als Standard-Dokument fest
+
+
 DirectoryIndex index.php
 
 # Erlaubt den Zugriff auf index.php und verweigert den Zugriff auf andere PHP-Dateien

@@ -1,40 +1,47 @@
-# init ubuntu
-FROM ubuntu:latest
+# Verwende das offizielle PHP-Apache-Image
+FROM php:8.2-apache
 
-# download git and update packages
-RUN apt-get update && apt-get install -y git
-
-# change workdir
-WORKDIR /warehouse
-
-# clone the 'dev-q3' branch of the warehouse repo from GitHub
-RUN git clone --branch dev-q3 https://github.com/ifheroes/warehouse.git
-
-# install php and apache webserver
+# Installiere notwendige Tools und Abhängigkeiten für PHP-Erweiterungen
 RUN apt-get update && apt-get install -y \
-    apache2 \
-    php \
-    libapache2-mod-php \
-    jq && \
-    a2enmod rewrite && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    git \
+    jq \
+    libcurl4-openssl-dev \
+    libonig-dev \
+    libzip-dev \
+    unzip \
+    gettext-base \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Remove the default Apache index.html page
-RUN rm -rf /var/www/html/*
+# Installiere PHP-Erweiterungen über docker-php-ext-install
+RUN docker-php-ext-install mysqli curl mbstring
 
-# Move the cloned warehouse repository to the Apache web directory
-RUN mv /warehouse/warehouse/* /var/www/html/
+# Setze das Arbeitsverzeichnis
+WORKDIR /var/www/html
 
-# Configure Apache on the port for api access
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && \
-    sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf && \
-    sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:8080>/' /etc/apache2/sites-available/000-default.conf
+# Entferne die Standard-Apache index.html Seite
+RUN rm -f /var/www/html/index.html
 
-# Copy the config file into the container (overwrite default configuration)
-COPY ./config.json /var/www/html/config.json
+# Kopiere den Website-Code in den Container
+COPY /v1/ /var/www/html/
 
-# Expose port 8080 for Apache
-EXPOSE 8080
+# Kopiere weitere Dateien
+COPY ./v1/sec/auth_token.json /var/www/html/v1/sec/auth_token.json
 
-# Start Apache in the foreground (necessary for the container to keep running)
+# Setze eine Umgebungsvariable für den Port
+ARG APACHE_PORT=8081
+
+# Konfiguriere Apache, um auf dem angegebenen Port zu lauschen
+RUN sed -i "s/Listen 80/Listen ${APACHE_PORT}/" /etc/apache2/ports.conf && \
+    sed -i "s/<VirtualHost \*:80>/<VirtualHost \*:${APACHE_PORT}>/" /etc/apache2/sites-available/000-default.conf
+
+# Konfiguriere PHP, um Fehler in die Apache-Error-Logs zu schreiben
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/php.ini \
+    && echo "display_errors = Off" >> /usr/local/etc/php/php.ini \
+    && echo "log_errors = On" >> /usr/local/etc/php/php.ini \
+    && echo "error_log = /proc/self/fd/2" >> /usr/local/etc/php/php.ini
+
+# Exponiere den konfigurierten Port
+EXPOSE ${APACHE_PORT}
+
+# Starte Apache im Vordergrund
 CMD ["apache2ctl", "-D", "FOREGROUND"]

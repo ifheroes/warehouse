@@ -25,3 +25,4 @@ replay_pid*
 test.json
 .DS_Store
 v1/sec/auth_token.json
+v1/config.json

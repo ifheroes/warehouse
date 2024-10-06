@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  php-apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./v1:/var/www/html
+      - ./apache_logs:/var/log/apache2
+    environment:
+      - APACHE_PORT=8081
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
