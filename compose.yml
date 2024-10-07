@@ -1,10 +1,11 @@
 version: '3.8'
 
 services:
-  php-apache:
+  webservice:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: Ifheroes_player_warehouse_test
     ports:
       - "8081:8081"
     volumes:
