@@ -49,6 +49,36 @@ class db_manager
         $connection->close();
     }
 
+    /// delete a entry by uuid in warehouse database
+    public function database_delete_playerpprofil($uuid)
+    {
+
+        // creates database connection
+        $db_conn = new db_connection();
+        $connection = $db_conn->database_connection();
+
+        // gets playerprofile from database
+        $query = "SELECT * FROM player_warehouse WHERE player_uuid = '$uuid';";
+        $result = $connection->query($query);
+
+        // if exist print it out or return error
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+
+                $query_delete = "DELETE FROM player_warehouse WHERE player_uuid = '$uuid';"; // sql statment to delete
+                $connection->query($query_delete); // excute deletion
+
+                echo json_encode(['success' => 'Profile deleted']);
+            }
+        } else {
+            http_response_code(404);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Not found']);
+        }
+
+        $connection->close();
+    }
+
     /// creates the profile for the player connecting the first time
     public function database_create_playerprofil($uuid, $name, $data)
     {

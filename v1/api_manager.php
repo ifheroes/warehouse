@@ -23,6 +23,21 @@ class api_manager
         }
     }
 
+        /// this function delets all the data form a specific player profile
+        public function api_delete_playerpprofil($uuid)
+        {
+            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    
+                $sql_action = new db_manager();
+                $sql_action->database_delete_playerpprofil($uuid);
+            } else {
+                http_response_code(404);
+                header('Content-Type: application/json');
+                echo json_encode(['error' => 'Needs to be a DELETE']);
+                exit;
+            }
+        }
+
     /// creates the profile for the player connecting the first time
     public function api_create_playerprofil()
     {

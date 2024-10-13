@@ -15,9 +15,15 @@ if ($auth_action->bearer_token_auth() == true){
 
     // API actions are executed only if authentication is successful
     $api_action = new api_manager();
-    // Get user
+
+    // Get user profile
     if(isset($_GET['uuid'])){
         $api_action->api_get_playerpprofil($_GET['uuid']);
+    }
+
+    // get key to delete profile
+    if(isset($_GET['delete'])){
+        $api_action->api_delete_playerpprofil($_GET['delete']);
     }
 
     // Create user
