@@ -55,10 +55,6 @@ if ($auth_action->bearer_token_auth() == true) {
             http_response_code(400);
             echo json_encode(['error' => 'Missing section in request data']);
         }
-    } else {
-        // Fehler: Eingehende Daten sind kein gültiges JSON
-        http_response_code(400);
-        echo json_encode(['error' => 'Invalid JSON format']);
     }
 } else {
     // Authentication failed, the error message is already sent in the auth class

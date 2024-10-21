@@ -128,15 +128,31 @@ class api_manager
 
             // Check if both 'uuid' and 'updater' exist in the 'schema'
             if (isset($data['schema']['uuid']) && isset($data['schema']['updater'])) {
-                $uuid = $data['schema']['uuid'];
-                $json = $data['schema']['updater'];
 
-                $sql_action->database_update_pluginData($uuid, $json);
+                // Get the player profile
+                $uuid = $data['schema']['uuid'];
+                $updater = $data['schema']['updater'];
+
+                // Check if 'updater' is already an array (decoded JSON)
+                if (is_string($updater)) {
+                    // If 'updater' is a string, decode it
+                    $updater = json_decode($updater, true);
+                }
+
+                // Now you can safely use the $updater as an array
+                $sql_action->database_update_pluginData($uuid, $updater);
+
+                // Optionally, get the player profile
+                $sql_action->database_get_playerpprofil($uuid);
             } else {
                 http_response_code(404);
                 header('Content-Type: application/json');
                 echo json_encode(['error' => 'There is something missing in the schema']);
             }
+        } else {
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode(['error' => 'Invalid JSON input']);
         }
     }
 }
