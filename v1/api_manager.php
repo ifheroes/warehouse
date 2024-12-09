@@ -22,6 +22,17 @@ class api_manager
         }
     }
 
+    // This function displays a success message if the auth token is valid
+    public function api_get_checkauth()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => 'API Key is valid!']);
+            exit;
+        }
+    }
+
     // This function deletes all the data for a specific player profile
     public function api_delete_playerpprofil($uuid)
     {
