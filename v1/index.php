@@ -10,16 +10,23 @@ include('auth_manager.php');
 $auth_action = new auth();
 
 
-// Authenticate the API key
+// Authenticate the API key if bearer token is true
 if ($auth_action->bearer_token_auth() == true) {
 
     // API actions are executed only if authentication is successful
     $api_action = new api_manager();
 
+    // check if user has a valid token to access the api #5
+    if (isset($_GET['checkauth'])) {
+        $api_action->api_get_checkauth();
+    }    
+
     // Get user profile
     if (isset($_GET['uuid'])) {
         $api_action->api_get_playerpprofil($_GET['uuid']);
     }
+
+
 
     // get key to delete profile
     if (isset($_GET['delete'])) {
