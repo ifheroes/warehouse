@@ -5,8 +5,13 @@ services:
   webservice:
     build:
       context: .
+<<<<<<< Updated upstream
       dockerfile: DOCKERFILE
     container_name: Ifheroes_player_warehouse_test
+=======
+      dockerfile: Dockerfile
+    container_name: Ifheroes_player_warehouse_prod
+>>>>>>> Stashed changes
     ports:
       - "8081:8081"
     volumes:
