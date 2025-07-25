@@ -6,8 +6,13 @@ services:
     build:
       context: .
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       dockerfile: DOCKERFILE
     container_name: Ifheroes_player_warehouse_test
+=======
+      dockerfile: Dockerfile
+    container_name: Ifheroes_player_warehouse_prod
+>>>>>>> Stashed changes
 =======
       dockerfile: Dockerfile
     container_name: Ifheroes_player_warehouse_prod
